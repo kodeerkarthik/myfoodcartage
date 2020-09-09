@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+.sidenav {
+  background:rgb(33,59,178);
+  
+}

@@ -1,0 +1,18 @@
+.custome_select {
+    width: auto;
+    display: inline-block;
+}
+
+.custome_search {
+    margin-left: 0.5em;
+    display: inline-block;
+    width: auto;
+}
+.cshadow{
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 10%);
+}
+
+.tshadow{
+    border: 0;
+    box-shadow: 0 0.5rem 1rem rgb(0 0 0 / 50%);
+}

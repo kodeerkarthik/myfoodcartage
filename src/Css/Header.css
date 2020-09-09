@@ -1,0 +1,30 @@
+.custome_nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1039;
+}
+
+.custome_brand {
+    width: 190px;
+}
+
+.dropdown-list {
+    padding: 0 !important;
+    border: none !important;
+    overflow: hidden;
+    width: 20rem!important;
+}
+
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header_body {
+    position: fixed;
+    width: 100%;
+    z-index: 1039;
+}

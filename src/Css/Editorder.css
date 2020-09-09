@@ -1,0 +1,6 @@
+.generic_image {
+    width: 120px;
+    border-radius: 6px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    height: 120px;
+}
