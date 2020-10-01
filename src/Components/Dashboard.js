@@ -1,14 +1,41 @@
 import React, { Component } from 'react';
 import '../Css/Dashboard.css'
 import { Link } from "react-router-dom";
+import axios from 'axios';
+import browserHistory from '../config/browserHistory';
 
 class Dashboard extends Component {
+	state={
+		restaurant:[],
+		users:[]
+	}
+
+	componentDidMount(){
+		axios.get(`http://192.168.0.101:8080/resturant/get`)
+      .then(res => {
+				this.setState({ restaurant:res.data });
+			})
+		
+		axios.get(`http://192.168.0.101:8080/user/get`)
+      .then(res => {
+				this.setState({ users:res.data });
+				console.log(this.state.users)
+			})
+		const email=sessionStorage.getItem('email')
+		axios.get('http://192.168.0.101:8080/resturant/read', {
+			params: {
+				email: email
+			}
+		}).then(res => {
+			localStorage.setItem('current_user',JSON.stringify(res.data))
+		})
+	}
 	render() {
 		return (
 			<div className="container-fluid pt-5 mt-2">
-				<h1 className="mt-4">Dashboard</h1>
+				<h1 className="mt-4" >Dashboard</h1>
 				<ol className="breadcrumb mb-4 bg-white cshadow">
-					<li className="breadcrumb-item active">Dashboard</li>
+					<li className="breadcrumb-item active">Dashboard </li>
 				</ol>
 				<div className="row">
 					<div className="col-xl-3 col-md-6">
@@ -49,6 +76,10 @@ class Dashboard extends Component {
 					</div>
 				</div>
 
+				<div className='mb-3'>
+					<a href="/menu" class="btn btn-sm btn-secondary">Menu List</a>
+				</div>
+
 				<div className="card mb-4 tshadow">
 					<div className="card-header bg-white">
 						<i className="fa fa-table mr-1"></i> RECENT 10 ORDER
@@ -56,7 +87,7 @@ class Dashboard extends Component {
 
 					<div className="card-body">
             <div className="table-responsive">
-              <div id="dataTable_wrapper" className="dataTables_wrapper dt-bootstrap4 no-footer">
+              <div  className="dataTables_wrapper dt-bootstrap4 no-footer">
 								<div className="row">
 									<div className="col-sm-12 col-md-6">
 										<div className="dataTables_length" id="dataTable_length">
@@ -220,6 +251,75 @@ class Dashboard extends Component {
             </div>
 					</div>
 				</div>	
+
+				<div className="card mb-4 tshadow">
+					<div className="card-header bg-white">
+						<i className="fa fa-table mr-1"></i> RESTAURANT LIST
+					</div>
+					<div className="card-body">
+						<table className="table dataTable no-footer" id="dataTable" width="100%" cellSpacing="0" role="grid" aria-describedby="dataTable_info" style={{width: "100%"}}>
+							<thead>
+								<tr className="text-uppercase" role="row">
+									<th rowSpan="1" colSpan="1" style={{width: "120px"}}>Resturant</th>
+									<th rowSpan="1" colSpan="1" style={{width: "81px"}}>Contact</th>
+									<th rowSpan="1" colSpan="1" style={{width: "60px"}}>email</th>
+									<th rowSpan="1" colSpan="1" style={{width: "60px"}}>Phone </th>
+									<th rowSpan="1" colSpan="1" style={{width: "110px"}}>Address</th>
+									<th rowSpan="1" colSpan="1" style={{width: "50px"}}>GST / PAN</th>
+									<th rowSpan="1" colSpan="1" style={{width: "63px"}}>Action</th>
+								</tr>
+							</thead>
+							<tbody>                       	
+								{this.state.restaurant.map(rest => {
+									return(<tr role="row" className="odd">
+										<td>{rest.resturant_name}</td>
+										<td>{rest.contact_name}</td>
+										<td>{rest.email}</td>
+										<td>{rest.phone}</td>
+										<td>{rest.address}</td>
+										<td>{rest.gst}</td>
+										<td><Link to={'#'} className="btn btn-primary btn-sm">View</Link></td>										
+									</tr>)
+								})}									
+							</tbody>
+						</table>
+					</div>
+				</div>
+				
+				<div className="card mb-4 tshadow">
+					<div className="card-header bg-white" >
+						<i className="fa fa-table mr-1"></i> USER LIST
+					</div>
+					<div className="card-body">
+						<table className="table dataTable no-footer" id="dataTable" width="100%" cellSpacing="0" role="grid" aria-describedby="dataTable_info" style={{width: "100%"}}>
+							<thead>
+								<tr className="text-uppercase" role="row">
+									<th rowSpan="1" colSpan="1">First Name</th>
+									<th rowSpan="1" colSpan="1" >Last Name</th>
+									<th rowSpan="1" colSpan="1" >Email</th>
+									<th rowSpan="1" colSpan="1" >Phone</th>
+									<th rowSpan="1" colSpan="1" >Address</th>
+									<th rowSpan="1" colSpan="1" >Role</th>
+								</tr>
+							</thead>
+							<tbody>                       
+								{this.state.users.map(user => {
+									return(<tr role="row" className="odd">
+										<td>{user.firstname}</td>
+										<td>{user.lastname}</td>
+										<td>{user.email}</td>
+										<td>{user.phone}</td>
+										<td>{user.address}</td>
+										<td>{user.role}</td>
+										{/* <td>{rest.gst}</td>	 */}
+										{/* <td><Link to={'#'} className="btn btn-primary btn-sm">View</Link></td>										 */}
+									</tr>)
+								})}
+							</tbody>
+						</table>
+					</div>
+				</div>
+
 			</div>
 		);
 	}

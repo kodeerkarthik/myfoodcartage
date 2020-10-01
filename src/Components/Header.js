@@ -14,6 +14,8 @@ class Header extends Component {
 
 	logout = () => {
 		sessionStorage.removeItem('auth')
+		sessionStorage.removeItem('email')
+		localStorage.removeItem('current_user')
 	}
 	
 	render() {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import fire from '../config/fire';
 import axios from 'axios';
-
+import browserHistory from '../config/browserHistory'
 class Register extends Component {
 
 	constructor(props){
@@ -27,28 +27,31 @@ class Register extends Component {
 
 	register = (e) => {
 		e.preventDefault();
-		// fire.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
-		// .then(u => {
-		// 	console.log(u)
-		// }). catch(err => {
-		// 	console.log(err)
-		// })
-		// const { firstname,lastname,email,phone, role,	resturant_name, contact_name, address, gst} = this.state
-		// if(this.state.role == 'user'){
-		// 	axios.post(`http://192.168.0.104:8080/user/create`, { firstname,lastname,email,phone,role})
-		// 	.then(res => {
-		// 		console.log(res);
-		// 	}). catch(err => {
-		// 		console.log(err)
-		// 	})
-		// } else {
-		// 	axios.post(`http://192.168.0.104:8080/resturant/create`, { resturant_name,contact_name,email,phone,role,address,gst})
-		// 	.then(res => {
-		// 		console.log(res);
-		// 	}). catch(err => {
-		// 		console.log(err)
-		// 	})
-		// }
+		fire.auth().createUserWithEmailAndPassword(this.state.email,this.state.password)
+		.then(u => {
+			console.log(u)
+			const { firstname,lastname,email,phone, role,	resturant_name, contact_name, address, gst} = this.state
+			if(this.state.role == 'user'){
+				axios.post(`http://192.168.0.101:8080/user/create`, { firstname,lastname,email,phone,role,address})
+				.then(res => {
+					console.log(res);
+					browserHistory.push('/')
+				}). catch(err => {
+					console.log(err)
+				})
+			} else {
+				debugger
+				axios.post(`http://192.168.0.101:8080/resturant/create`, { resturant_name,contact_name,email,phone,role,address,gst})
+				.then(res => {
+					console.log(res);
+					browserHistory.push('/')
+				}). catch(err => {
+					console.log(err)
+				})
+			}
+		}). catch(err => {
+			console.log(err)
+		})
 		document.getElementById("myForm").reset();
 	}
 
@@ -135,25 +138,25 @@ class Register extends Component {
 											</div>
                     </div>
 
-										{this.state.role=='resturant' ? 
-											<div className="form-row">
-												<div className="col-md-6">
-													<div className="form-group">
-														{/* <label className="small mb-1">Address</label> */}
-														<input className="form-control" type="text" name='address' onChange={this.handleChange} placeholder="Enter address"/>
-													</div>
+										
+										<div className="form-row">
+											<div className="col-md-6">
+												<div className="form-group">
+													{/* <label className="small mb-1">Address</label> */}
+													<input className="form-control" type="text" name='address' onChange={this.handleChange} placeholder="Enter address"/>
 												</div>
+											</div>
+											{this.state.role=='resturant' ? 
 												<div className="col-md-6">
 													<div className="form-group">
 														{/* <label className="small mb-1">GST / PAN</label> */}
 														<input className="form-control" type="text" name='gst' onChange={this.handleChange}  placeholder="Enter GST / PAN"/>
 													</div>
 												</div>
-											</div> 
-											:
-											<></>
-										}
-
+												:
+												<></>
+											}
+										</div> 
                     <div className="form-group mt-4 mb-0">
 											<button className="btn btn-primary btn-block" onClick={this.register}>Create Account</button>
 										</div>

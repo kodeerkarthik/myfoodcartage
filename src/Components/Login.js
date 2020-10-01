@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import fire from '../config/fire';
 import firebase from 'firebase';
 import browserHistory from '../config/browserHistory'
-
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Login extends Component {
 
@@ -22,11 +24,17 @@ class Login extends Component {
 		e.preventDefault();
 		fire.auth().signInWithEmailAndPassword(this.state.email,this.state.password).then(u=>{
 			console.log(u)
+			toast.success("Login successfully", {position: "top-center"})
 			sessionStorage.setItem('auth', u.user.uid)
+			sessionStorage.setItem('email', u.user.email)
 			browserHistory.push('/dashboard')
 		}).catch(err => {
 			console.log(err);
+			toast.error(err.message, {
+				position: "top-center"
+			})
 		})
+		// this.props.loginHandle(this.state.email,this.state.password);
 	}
 
 	googleLogin = (e) => {
@@ -44,6 +52,7 @@ class Login extends Component {
 	render() {
 		return (
 			<div style={{background:"#3259ff",width:"100%",padding:'62px 0 100px 0'}}>
+				<ToastContainer />
 				<div className="container">
 					<div className="row justify-content-center">
 						<div className="col-lg-5">
@@ -85,5 +94,7 @@ class Login extends Component {
 		);
 	}
 }
+
+
 
 export default Login;

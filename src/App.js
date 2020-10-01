@@ -7,6 +7,10 @@ import Editorder from './Components/Editorder';
 import Login from './Components/Login';
 import Register from './Components/Register';
 import fire from './config/fire'
+import MenuList from './Components/MenuList';
+import AddList from './Components/AddList';
+import Submenu from './Components/Submenu';
+import CreateSubmenu from './Components/CreateSubmenu';
 
 const PrivateRoute = ({ component: IncomingComponent, ...rest }) => (
   <Route {...rest}
@@ -60,6 +64,10 @@ class App extends Component {
               <Header user={this.state.user}/>
               <PrivateRoute exact path='/dashboard' component={Dashboard}></PrivateRoute>
               <PrivateRoute exact path='/edit' component={Editorder}></PrivateRoute>
+              <PrivateRoute exact path='/menu' component={MenuList}></PrivateRoute>
+              <PrivateRoute exact path='/addlist' component={AddList}></PrivateRoute>
+              <PrivateRoute exact path='/submenu' component={Submenu}></PrivateRoute>
+              <PrivateRoute exact path='/addsubmenu' component={CreateSubmenu}></PrivateRoute>
             </div>           
           </Switch>
         </div>
