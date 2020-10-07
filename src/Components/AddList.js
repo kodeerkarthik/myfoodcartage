@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import api from '../api/index';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import browserHistory from '../config/browserHistory';
@@ -22,7 +22,7 @@ class AddList extends Component {
 		const menu=this.state.menu;
 		console.log(menu)
 		const resturant_id=JSON.parse(localStorage.getItem('current_user')).resturant_id
-		axios.post(`http://192.168.0.101:8080/menu/create`, { menu,resturant_id})
+		api.post(`menu/create`, { menu,resturant_id})
 			.then(res => {
 				toast.success("Successfully added", {position: "top-center"})
 				browserHistory.push('/menu')

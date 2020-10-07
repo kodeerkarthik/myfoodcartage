@@ -22,12 +22,14 @@ class Header extends Component {
 		return (
 			<div className="cshadow header_body">
 				<nav className="custom_nav sb-topnav navbar navbar-expand navbar-light bg-white shadow-sm">
-					<a className="navbar-brand custome_brand" href="/"><img alt="logo" src={require('../Images/logo.png')}/></a>
+					<a className="navbar-brand custome_brand" href="/">
+						<img alt="logo" height='30px' src={require('../Images/logo.png')}/>
+					</a>
 
 
-					<button className="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#" >
+					{/* <button className="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#" >
 						<i className="fa fa-bars" style={{color:'black'}} onClick={() => this.setState({showNav: true})}></i> 
-					</button>
+					</button> */}
 					<SideNav mode='push' style={{maxWidth: '250px', width:'100%',}} showNav = {this.state.showNav} onHideNav = {() => this.setState({showNav: false})} >
 						<Sidenav/>
 					</SideNav>

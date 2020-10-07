@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import fire from '../config/fire';
 import axios from 'axios';
+import api from '../api/index';
 import browserHistory from '../config/browserHistory'
 class Register extends Component {
 
@@ -32,7 +33,7 @@ class Register extends Component {
 			console.log(u)
 			const { firstname,lastname,email,phone, role,	resturant_name, contact_name, address, gst} = this.state
 			if(this.state.role == 'user'){
-				axios.post(`http://192.168.0.101:8080/user/create`, { firstname,lastname,email,phone,role,address})
+				api.post(`user/create`, { firstname,lastname,email,phone,role,address})
 				.then(res => {
 					console.log(res);
 					browserHistory.push('/')
@@ -41,7 +42,7 @@ class Register extends Component {
 				})
 			} else {
 				debugger
-				axios.post(`http://192.168.0.101:8080/resturant/create`, { resturant_name,contact_name,email,phone,role,address,gst})
+				api.post(`resturant/create`, { resturant_name,contact_name,email,phone,role,address,gst})
 				.then(res => {
 					console.log(res);
 					browserHistory.push('/')

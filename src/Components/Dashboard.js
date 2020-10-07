@@ -2,27 +2,25 @@ import React, { Component } from 'react';
 import '../Css/Dashboard.css'
 import { Link } from "react-router-dom";
 import axios from 'axios';
+import api from '../api/index'
 import browserHistory from '../config/browserHistory';
 
 class Dashboard extends Component {
 	state={
 		restaurant:[],
-		users:[]
+		pageNo:1,
+		totalPage:'',
+		users:[],
+		user_pageNo:1,
+		user_totalPage:''
 	}
 
 	componentDidMount(){
-		axios.get(`http://192.168.0.101:8080/resturant/get`)
-      .then(res => {
-				this.setState({ restaurant:res.data });
-			})
 		
-		axios.get(`http://192.168.0.101:8080/user/get`)
-      .then(res => {
-				this.setState({ users:res.data });
-				console.log(this.state.users)
-			})
+		this.getResturants(1);
+		this.getUsers(1);
 		const email=sessionStorage.getItem('email')
-		axios.get('http://192.168.0.101:8080/resturant/read', {
+		api.get('resturant/read', {
 			params: {
 				email: email
 			}
@@ -30,6 +28,57 @@ class Dashboard extends Component {
 			localStorage.setItem('current_user',JSON.stringify(res.data))
 		})
 	}
+
+	getResturants = (page_no) => {
+		api.get(`resturant/getByPage`, {
+			params: {
+				pageNo: page_no
+			}
+		}).then(res => {
+				this.setState({ restaurant:res.data.resturantList, pageNo:page_no, totalPage:res.data.noOfPages });
+			})
+	}
+
+	getUsers = (page_no) => {
+		debugger
+		api.get(`user/getByPage`, {
+			params: {
+				pageNo: page_no
+			}
+		}).then(res => {
+			console.log(res.data.userProfileList)
+				this.setState({ users:res.data.userProfileList, user_pageNo:page_no, user_totalPage:res.data.noOfPages });
+			})
+	}
+	
+	pagination=()=>{
+		var page = []
+		for (let i = 1; i <= this.state.totalPage; i++) {
+			page.push(<li className="paginate_button page-item">
+				{this.state.pageNo==i?
+					<li className="paginate_button page-item active">
+						<button aria-controls="dataTable" className="page-link " onClick={() =>this.getResturants(i)}>{i}</button> </li>:
+				<button aria-controls="dataTable" className="page-link" onClick={() =>this.getResturants(i)}>{i}</button>
+				}
+		</li>)
+		}
+		return page;
+	}
+
+	userPagination=()=>{
+		var page = []
+		for (let i = 1; i <= this.state.user_totalPage; i++) {
+			page.push(<li className="paginate_button page-item">
+				{this.state.user_pageNo==i?
+					<li className="paginate_button page-item active">
+						<button aria-controls="dataTable" className="page-link " onClick={() =>this.getUsers(i)}>{i}</button> </li>:
+				<button aria-controls="dataTable" className="page-link" onClick={() =>this.getUsers(i)}>{i}</button>
+				}
+		</li>)
+		}
+		return page;
+	}
+
 	render() {
 		return (
 			<div className="container-fluid pt-5 mt-2">
@@ -87,7 +136,7 @@ class Dashboard extends Component {
 
 					<div className="card-body">
             <div className="table-responsive">
-              <div  className="dataTables_wrapper dt-bootstrap4 no-footer">
+              {/* <div  className="dataTables_wrapper dt-bootstrap4 no-footer"> */}
 								<div className="row">
 									<div className="col-sm-12 col-md-6">
 										<div className="dataTables_length" id="dataTable_length">
@@ -143,17 +192,8 @@ class Dashboard extends Component {
 													<td>5</td>
 													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
 												</tr>
+												
 												<tr role="row" className="odd">
-													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
-													<td> Airi Satou	</td>
-													<td>Metro Resto</td>
-													<td><button disabled="" type="button" className="btn btn-sm btn-success btn-round">delivered</button></td>
-													<td>Fri, Jul 10, 2020 3:48 PM</td>
-													<td>$26.78</td>
-													<td>2</td>
-													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
-												</tr>
-												<tr role="row" className="even">
 													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
 													<td> Brielle Williamson	</td>
 													<td>The Square restaurants</td>
@@ -161,66 +201,6 @@ class Dashboard extends Component {
 													<td>Fri, Jul 10, 2020 2:24 PM</td>
 													<td>$81.23</td>
 													<td>2</td>
-													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
-												</tr>
-												<tr role="row" className="odd">
-													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
-													<td> Cedric Kelly	</td>
-													<td>Metro Resto</td>
-													<td><button disabled="" type="button" className="btn btn-sm btn-success btn-round">delivered</button></td>
-													<td>Fri, Jul 10, 2020 11:45 AM</td>
-													<td>$1578.00</td>
-													<td>1</td>
-													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
-												</tr>
-												<tr role="row" className="even">
-													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
-													<td> Ashton Cox	</td>
-													<td>The Square restaurants</td>
-													<td><button disabled="" type="button" className="btn btn-sm btn-primary btn-round">created</button></td>
-													<td>Fri, Jul 10, 2020 11:37 AM</td>
-													<td>$238.53</td>
-													<td>4</td>
-													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
-												</tr>
-												<tr role="row" className="odd">
-													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
-													<td> Garrett Winters	</td>
-													<td>Metro Resto</td>
-													<td><button disabled="" type="button" className="btn btn-sm btn-danger btn-round">rejected</button></td>
-													<td>Thu, Jul 9, 2020 3:54 PM</td>
-													<td>$107.85</td>
-													<td>2</td>
-													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
-												</tr>
-												<tr role="row" className="even">
-													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
-													<td> Tiger Nixon	</td>
-													<td>The Square restaurants</td>
-													<td><button disabled="" type="button" className="btn btn-sm btn-danger btn-round">rejected</button></td>
-													<td>Thu, Jul 9, 2020 3:19 PM</td>
-													<td>$83.65</td>
-													<td>2</td>
-													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
-												</tr>
-												<tr role="row" className="odd">
-													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
-													<td> AMITKUMAR CHAUHAN</td>
-													<td>Jassi de Parathe</td>
-													<td><button disabled="" type="button" className="btn btn-sm btn-primary btn-round">created</button></td>
-													<td>Thu, Jul 9, 2020 2:28 PM</td>
-													<td>$46.62</td>
-													<td>2</td>
-													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
-												</tr>
-												<tr role="row" className="even">
-													<td className="sorting_1"><img className="img-profile rounded-circle" src={require('../Images/user.jpg')} width='30px' alt=''/></td>
-													<td> Umed Ibodulloev</td>
-													<td>Metro Resto</td>
-													<td><button disabled="" type="button" className="btn btn-sm btn-success btn-round">delivered</button></td>
-													<td>Thu, Jul 9, 2020 1:26 PM</td>
-													<td>$66.71</td>
-													<td>1</td>
 													<td><Link to={'/edit'} className="btn btn-primary btn-sm">View</Link></td>
 												</tr>
 											</tbody>
@@ -240,13 +220,16 @@ class Dashboard extends Component {
 												<li className="paginate_button page-item active">
 													<a href="#" aria-controls="dataTable" data-dt-idx="1" tabIndex="0" className="page-link">1</a>
 												</li>
+												<li className="paginate_button page-item ">
+													<a href="#" aria-controls="dataTable" data-dt-idx="1" tabIndex="0" className="page-link">2</a>
+												</li>
 												<li className="paginate_button page-item next disabled" id="dataTable_next">
 													<a href="#" aria-controls="dataTable" data-dt-idx="2" tabIndex="0" className="page-link">Next</a>
 												</li>
 											</ul>
 										</div>
 									</div>
-								</div>
+								{/* </div> */}
 							</div>
             </div>
 					</div>
@@ -283,8 +266,26 @@ class Dashboard extends Component {
 								})}									
 							</tbody>
 						</table>
+						<ul className="pagination" style={{justifyContent: "center"}}>
+							{this.state.pageNo<=1?
+							<li className="paginate_button page-item previous disabled" id="dataTable_previous">
+								<button className="page-link" onClick={() =>this.getResturants(this.state.pageNo-1)}>Previous</button>
+							</li>:
+							<li className="paginate_button page-item previous " id="dataTable_previous">
+								<button className="page-link" onClick={() =>this.getResturants(this.state.pageNo-1)}>Previous</button>
+							</li>}
+							{this.pagination()} 
+							{this.state.pageNo>=this.state.totalPage?
+							<li className="paginate_button page-item next disabled" id="dataTable_next">
+								<button className="page-link" onClick={() =>this.getResturants(this.state.pageNo+1)}>Next</button>
+							</li>:
+							<li className="paginate_button page-item next" id="dataTable_next">
+								<button className="page-link" onClick={() =>this.getResturants(this.state.pageNo+1)}>Next</button>
+							</li>}
+						</ul>
 					</div>
 				</div>
+				
 				
 				<div className="card mb-4 tshadow">
 					<div className="card-header bg-white" >
@@ -317,6 +318,23 @@ class Dashboard extends Component {
 								})}
 							</tbody>
 						</table>
+						<ul className="pagination" style={{justifyContent: "center"}}>
+							{this.state.user_pageNo<=1?
+							<li className="paginate_button page-item previous disabled" id="dataTable_previous">
+								<button className="page-link" onClick={() =>this.getUsers(this.state.user_pageNo-1)}>Previous</button>
+							</li>:
+							<li className="paginate_button page-item previous " id="dataTable_previous">
+								<button className="page-link" onClick={() =>this.getUsers(this.state.user_pageNo-1)}>Previous</button>
+							</li>}
+							{this.userPagination()} 
+							{this.state.user_pageNo>=this.state.user_totalPage?
+							<li className="paginate_button page-item next disabled" id="dataTable_next">
+								<button className="page-link" onClick={() =>this.getUsers(this.state.user_pageNo+1)}>Next</button>
+							</li>:
+							<li className="paginate_button page-item next" id="dataTable_next">
+								<button className="page-link" onClick={() =>this.getUsers(this.state.user_pageNo+1)}>Next</button>
+							</li>}
+						</ul>
 					</div>
 				</div>
 

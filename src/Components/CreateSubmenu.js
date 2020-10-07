@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
-import axios from 'axios';
+import api from '../api/index';
 import browserHistory from '../config/browserHistory';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
-	
+
 class CreateSubmenu extends Component {
   constructor(props){
 		super(props);
@@ -31,7 +31,7 @@ class CreateSubmenu extends Component {
     console.log(submenu,timings,price,keywords,this.props.location.state.menu_id)
     const menu_id=this.props.location.state.menu_id
     price=parseFloat(price);
-		axios.post(`http://192.168.0.101:8080/submenu/create`, { submenu,timings,price,keywords,menu_id})
+		api.post(`submenu/create`, { submenu,timings,price,keywords,menu_id})
 			.then(res => {
 				console.log(res);
 				toast.success("Successfully added", {position: "top-center"})

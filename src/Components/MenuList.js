@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import browserHistory from '../config/browserHistory';
-import axios from 'axios';
+import api from	'../api/index'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +15,7 @@ class MenuList extends Component {
 	}
 
 	deleteMenu=(id,name)=>{
-		axios.delete(`http://192.168.0.101:8080/menu/delete`, {
+		api.delete(`menu/delete`, {
 			params: {
 				menu_id: id
 			}
@@ -34,7 +34,7 @@ class MenuList extends Component {
 
 	getMenu =()=>{
 		const resturant_id=JSON.parse(localStorage.getItem('current_user')).resturant_id
-		axios.get(`http://192.168.0.101:8080/menu/get`, {
+		api.get(`menu/get`, {
 			params: {
 				resturant_id: resturant_id
 			}
@@ -58,7 +58,7 @@ class MenuList extends Component {
 					<a href="/addlist" class="btn btn-sm btn-success">Add List</a>
 				</div>
 				
-				<div className="card mb-4 tshadow">
+				<div className="card mb-4">
 					<div className="card-header bg-white">
 						<i className="fa fa-table mr-1"></i> Menu List
 					</div>

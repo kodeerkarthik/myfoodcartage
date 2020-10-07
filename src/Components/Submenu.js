@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
 import browserHistory from '../config/browserHistory';
-import axios from 'axios';
+import api from '../api/index';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,7 +15,7 @@ class Submenu extends Component {
 
 	getSubmenulist = () => {
 		const id=this.props.location.state.menu_id
-		axios.get(`http://192.168.0.101:8080/submenu/get`, {
+		api.get(`submenu/get`, {
 			params: {
 				menu_id: id
 			}
@@ -26,7 +26,7 @@ class Submenu extends Component {
 	}
 
 	deleteSubmenu = (id,name) =>{
-		axios.delete(`http://192.168.0.101:8080/submenu/delete`, {
+		api.delete(`submenu/delete`, {
 			params: {
 				submenu_id: id
 			}
